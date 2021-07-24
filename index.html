@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<header>
+    <link rel="stylesheet" href="style.css">
+</header>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+
+    <div id="watch-example">
+        <p>
+          Ask a yes/no question:
+          <input v-model.trim="question">
+          <p>{{question}}</p>
+        </p>
+        
+        <p v-bind:class="{'green-answer': isYes, 'red-answer': !isYes}">{{ answer }}</p>
+
+        <p v-if="isYes">It's a Yes answer!!!</p>
+        <p v-else>It's a no :(</p>
+        <p>Chosen questions: {{checkedQuestions}}</p>
+        <p v-show="questions.length">List of questions asked and answers:</p>
+        <ul>
+          <li v-for="(quest, index) in questions">{{index+1}}. {{quest.askedQuestion}} - {{quest.answered}}
+            <input type="checkbox" :id="index" :value="index+1+' '+quest.answered" v-model="checkedQuestions">
+            <label :for="index+1">choose question {{index+1}}</label>
+          </li>
+          
+        </ul>
+        <button v-show="questions.length" v-on:click="removeAll">Clear the list!</button>
+
+  
+      </div>
+
+
+    <script src="script.js"></script>
+    </script>
+</body>
+
+</html>
