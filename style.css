@@ -1,11 +1,10 @@
-.test-css{
-    color: red;
-}
-
-.red-answer{
-    color: red;
-}
-
-.green-answer{
+.green-strike{
+    text-decoration: line-through;
     color: green;
+}
+.green-check{
+    color: green;
+}
+.red-cross{
+    color: red;
 }

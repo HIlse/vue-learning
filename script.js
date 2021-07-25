@@ -1,51 +1,95 @@
-var watchExampleVM = new Vue({
-  el: '#watch-example',
+var passwordValidator = new Vue({
+  el: "#password-validator",
   data: {
-    question: '',
-    answer: 'I cannot give you an answer until you ask a question!',
-    isYes: false,
-    questions: [],
-    checkedQuestions: []
+    passwordText: '',
+    hasNumber: false,
+    is8Chars: false,
+    hasLowercase: false,
+    hasUppercase: false,
+    hasSpecial: false,
+    isOK: false
+  },
+  created: function() {
+    this.debouncedCheckPassword = _.debounce(this.checkPassword, 500)
   },
   watch: {
-    // whenever question changes, this function will run
-    question: function (newQuestion, oldQuestion) {
-      this.answer = 'Waiting for you to stop typing...'
-      this.debouncedGetAnswer()
+    passwordText: function (oldPassword, newPassword) {
+      this.debouncedCheckPassword();
     }
   },
-  created: function () {
-    // _.debounce is a function provided by lodash to limit how
-    // often a particularly expensive operation can be run.
-    // In this case, we want to limit how often we access
-    // yesno.wtf/api, waiting until the user has completely
-    // finished typing before making the ajax request. To learn
-    // more about the _.debounce function (and its cousin
-    // _.throttle), visit: https://lodash.com/docs#debounce
-    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
-  },
   methods: {
-    getAnswer: function () {
-      if (this.question.indexOf('?') === -1) {
-        this.answer = 'Questions usually contain a question mark. ;-)'
-        return
+    checkPassword: function () {
+      //check 8 characers
+      if (this.passwordText.length >= 8) {
+        this.is8Chars = true;
+      } else {
+        this.is8Chars = false;
       }
-      this.answer = 'Thinking...';
-      axios.get('https://yesno.wtf/api')
-        .then(response => {
-          this.answer = _.capitalize(response.data.answer)
-          if (this.answer == 'Yes') {
-            this.isYes = true;
-          } else{
-            this.isYes = false;
+
+      //check number
+      if ([...this.passwordText].some(n => !isNaN(n) === true)) {
+        this.hasNumber = true;
+      } else {
+        this.hasNumber = false;
+      }
+
+      
+      //check special
+      let checkSpecial = e => {
+        if (e.match(/^[^a-zA-Z0-9]+$/) !=null) {
+          return true;
+        }
+        return false;
+      }
+      if ([...this.passwordText].some(checkSpecial)) {
+        this.hasSpecial = true;
+      } else {
+        this.hasSpecial = false;
+      }
+    
+
+      //check lowercase
+      let checkLowercase = c => {
+        if (isNaN(c) && !checkSpecial(c)) {
+          if (c === c.toLowerCase()) {
+            return true;
           }
-          this.questions.push({ askedQuestion: this.question, answered: this.answer });
-        })
-        .catch(error => this.answer = 'Error! Could not reach the API. ' + error)
-    },
-    removeAll: function (event) {
-      this.questions.splice(0, this.questions.length);
-      console.log(event.target.tagName);
+          return false;
+        }
+      }
+      if ([...this.passwordText].some(checkLowercase)) {
+        this.hasLowercase = true;
+      } else {
+        this.hasLowercase = false;
+      }
+
+      //check uppercase
+      let checkUppercase = c => {
+        if (isNaN(c) && !checkSpecial(c)) {
+          if (c === c.toUpperCase()) {
+            return true;
+          }
+          return false;
+        }
+      }
+      if ([...this.passwordText].some(checkUppercase)) {
+        this.hasUppercase = true;
+      } else {
+        this.hasUppercase = false;
+      }
+
+      if (this.is8Chars && this.hasNumber && this.hasLowercase && this.hasUppercase && this.hasSpecial) {
+        this.isOK = true;
+      } else {
+        this.isOK = false;
+      }
+
+      console.log('8 check '+this.is8Chars);
+      console.log('num check ' + this.hasNumber);
+      console.log('low check '+this.hasLowercase);
+      console.log('up check '+this.hasUppercase);
+      console.log('spec check '+this.hasSpecial);
+
     }
   }
 })

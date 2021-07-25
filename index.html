@@ -9,31 +9,19 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
 
-    <div id="watch-example">
-        <p>
-          Ask a yes/no question:
-          <input v-model.trim="question">
-          <p>{{question}}</p>
-        </p>
-        
-        <p v-bind:class="{'green-answer': isYes, 'red-answer': !isYes}">{{ answer }}</p>
-
-        <p v-if="isYes">It's a Yes answer!!!</p>
-        <p v-else>It's a no :(</p>
-        <p>Chosen questions: {{checkedQuestions}}</p>
-        <p v-show="questions.length">List of questions asked and answers:</p>
-        <ul>
-          <li v-for="(quest, index) in questions">{{index+1}}. {{quest.askedQuestion}} - {{quest.answered}}
-            <input type="checkbox" :id="index" :value="index+1+' '+quest.answered" v-model="checkedQuestions">
-            <label :for="index+1">choose question {{index+1}}</label>
-          </li>
-          
-        </ul>
-        <button v-show="questions.length" v-on:click="removeAll">Clear the list!</button>
-
-  
-      </div>
-
+  <p>Password:</p>
+  <div id="password-validator">
+    <input type="password" v-model="passwordText" placeholder="Input your Password">
+    <span v-show="passwordText.length != 0" :class="isOK ? 'green-check' : 'red-cross'">{{isOK ? '✔': '✘'}}</span>
+    <p>{{passwordText}}</p>
+    <p>Password should contain 
+      <span v-bind:class="is8Chars ? 'green-strike' : ''">atleast 8 characters</span>,
+      <span v-bind:class="hasLowercase ? 'green-strike' : ''">one lowercase letter</span>,
+      <span v-bind:class="hasUppercase ? 'green-strike' : ''">one uppercase letter</span>,
+      <span v-bind:class="hasNumber ? 'green-strike' : ''">one number</span>, and
+      <span v-bind:class="hasSpecial ? 'green-strike' : ''">one special character</span>
+    </p>
+  </div>
 
     <script src="script.js"></script>
     </script>
