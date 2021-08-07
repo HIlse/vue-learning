@@ -8,3 +8,23 @@
 .red-cross{
     color: red;
 }
+
+body{
+    background: #f1eeee;
+
+}
+
+.neu{
+    margin: 300px;
+    width: px;
+    height: 100px;
+    border-radius: 10px;
+
+    box-shadow: 9px 9px 16px #cdcaca,
+      -9px -9px 16px #ffffff,
+       inset 3px 3px 7px #cdcaca, 
+      inset -3px -3px 7px #FFFFFF;
+    background: linear-gradient(318.32deg, #f1eeee 0%, #f1eeee 55%, #f1eeee 100%);
+    /* background: linear-gradient(145deg, #d9d6d6, #ffffff); */
+
+}
